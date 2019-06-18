@@ -11,14 +11,13 @@ import AdminPostForm from '~/components/Admin/AdminPostForm'
 import axios from 'axios'
 export default {
   layout: 'admin',
+  middleware: ['checkAuth', 'auth'],
   components: {
     AdminPostForm
   },
   asyncData(context) {
     return axios
-      .get(
-        `https://nuxt-blog-b1ee4.firebaseio.com/posts/${context.params.postId}.json`
-      )
+      .get(`${process.env.dbBaseUrl}/posts/${context.params.postId}.json`)
       .then(res => {
         return { loadedPost: { ...res.data, id: context.params.postId } }
       })
