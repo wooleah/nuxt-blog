@@ -3,7 +3,7 @@
     <section class="intro">
       <h1>Get the latest tech news!</h1>
     </section>
-    <PostList/>
+    <PostList :posts="loadedPosts"/>
   </div>
 </template>
 
@@ -12,6 +12,20 @@ import PostList from '~/components/Posts/PostList'
 export default {
   components: {
     PostList
+  },
+  // data() {
+  //   return {
+  //     loadedPosts: []
+  //   }
+  // },
+
+  computed: {
+    loadedPosts() {
+      return this.$store.getters.loadedPosts
+    }
+  },
+  created() {
+    this.$store.dispatch('setPosts', this.loadedPosts)
   }
 }
 </script>

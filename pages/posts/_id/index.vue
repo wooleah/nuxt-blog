@@ -1,12 +1,12 @@
 <template>
   <div class="single-post-page">
     <section class="post">
-      <h1 class="post-title">Title of the post</h1>
+      <h1 class="post-title">{{loadedPost.title}}</h1>
       <div class="post-details">
-        <div class="post-detail">Last updated on XXX</div>
-        <div class="post-detail">Written by NAME</div>
+        <div class="post-detail">{{loadedPost.updatedDate}}</div>
+        <div class="post-detail">{{loadedPost.author}}</div>
       </div>
-      <p>Content of the post</p>
+      <p>{{loadedPost.content}}</p>
     </section>
     <section class="post-feedback">
       <p>
@@ -20,7 +20,19 @@
 </template>
 
 <script>
-export default {}
+import axios from 'axios'
+export default {
+  asyncData(context) {
+    return axios
+      .get(
+        `https://nuxt-blog-b1ee4.firebaseio.com/posts/${context.params.id}.json`
+      )
+      .then(res => {
+        return { loadedPost: res.data }
+      })
+      .catch(err => context.error(err))
+  }
+}
 </script>
 
 <style scoped lang="scss">
