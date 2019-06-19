@@ -2,6 +2,7 @@
   <div class="admin-page">
     <section class="new-post">
       <AppButton @click="$router.push('/admin/new-post')">Create Post</AppButton>
+      <AppButton style="margin-left: 10px" @click="onLogout">Logout</AppButton>
     </section>
     <section class="existing-posts">
       <h1>Existing Posts</h1>
@@ -11,12 +12,20 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 export default {
   layout: 'admin',
   middleware: ['checkAuth', 'auth'],
   computed: {
     loadedPosts() {
       return this.$store.getters.loadedPosts
+    }
+  },
+  methods: {
+    ...mapActions(['logout']),
+    onLogout() {
+      this.logout()
+      this.$router.push('/admin/auth')
     }
   }
 }

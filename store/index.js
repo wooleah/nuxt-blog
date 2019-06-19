@@ -44,10 +44,15 @@ const createStore = () => {
           })
           .catch(err => console.error(err))
       },
-      setPosts({ commit }, posts) {
+      setPosts({
+        commit
+      }, posts) {
         commit('setPosts', posts)
       },
-      addPost({ commit, state }, post) {
+      addPost({
+        commit,
+        state
+      }, post) {
         const createdPost = {
           ...post,
           updatedDate: new Date()
@@ -65,7 +70,10 @@ const createStore = () => {
           })
           .catch(err => console.log(err))
       },
-      editPost({ commit, state }, editedPost) {
+      editPost({
+        commit,
+        state
+      }, editedPost) {
         return axios
           .put(
             `https://nuxt-blog-b1ee4.firebaseio.com/posts/${editedPost.id}.json?auth=${state.token}`,
@@ -76,7 +84,10 @@ const createStore = () => {
           })
           .catch(err => console.log(err))
       },
-      authenticateUser({ commit, dispatch }, authData) {
+      authenticateUser({
+        commit,
+        dispatch
+      }, authData) {
         let authUrl =
           'https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=' +
           process.env.fbAPIKey
@@ -100,16 +111,16 @@ const createStore = () => {
             localStorage.setItem('tokenExpiration', expirationTime)
             Cookie.set('jwt', token)
             Cookie.set('expirationDate', expirationTime)
-            dispatch('setLogoutTimer', result.expiresIn * 1000)
+            return this.$axios.$post('http://localhost:3000/api/track-data', {
+              data: 'Authenticated!'
+            })
           })
           .catch(err => console.log(err))
       },
-      setLogoutTimer({ commit }, duration) {
-        setTimeout(() => {
-          commit('clearToken')
-        }, duration)
-      },
-      initAuth({ commit, dispatch }, req) {
+      initAuth({
+        commit,
+        dispatch
+      }, req) {
         let token = ''
         let expirationDate = ''
         // get token and expirationDate
@@ -131,14 +142,26 @@ const createStore = () => {
         } else {
           token = localStorage.getItem('token')
           expirationDate = localStorage.getItem('tokenExpiration')
+          // check expirationDate
         }
-        // check expirationDate
         if (new Date().getTime() > expirationDate || !token) {
+          console.log('invalid or non-existent token');
+          dispatch('logout')
           return
         }
         // set token and logoutTimer
         commit('setToken', token)
-        dispatch('setLogoutTimer', expirationDate - new Date().getTime())
+      },
+      logout({
+        commit
+      }) {
+        commit('clearToken')
+        Cookie.remove('token');
+        Cookie.remove('expirationDate')
+        if (process.client) {
+          localStorage.removeItem('token')
+          localStorage.removeItem('tokenExpiration')
+        }
       }
     },
     getters: {
