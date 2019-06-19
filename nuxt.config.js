@@ -7,8 +7,7 @@ export default {
    */
   head: {
     title: 'Nuxt blog',
-    meta: [
-      {
+    meta: [{
         charset: 'utf-8'
       },
       {
@@ -21,8 +20,7 @@ export default {
         content: process.env.npm_package_description || ''
       }
     ],
-    link: [
-      {
+    link: [{
         rel: 'icon',
         type: 'image/x-icon',
         href: '/favicon.ico'
@@ -78,9 +76,8 @@ export default {
     extend(config, ctx) {}
   },
   env: {
-    dbBaseUrl:
-      process.env.DB_BASE_URL || 'https://nuxt-blog-b1ee4.firebaseio.com',
-    fbAPIKey: 'AIzaSyA5ugJV11U9glgYFgDds8i7w_7geqrwepg'
+    dbBaseUrl: process.env.DB_BASE_URL || 'my_firebase_base_url',
+    fbAPIKey: 'my_firebase_api_key'
   },
   router: {
     middleware: 'log'
