@@ -76,7 +76,7 @@ export default {
     extend(config, ctx) {}
   },
   env: {
-    dbBaseUrl: process.env.DB_BASE_URL || 'my_firebase_base_url',
+    dbBaseUrl: process.env.DB_BASE_URL || 'https://nuxt-blog-b1ee4.firebaseio.com',
     fbAPIKey: 'my_firebase_api_key'
   },
   router: {
